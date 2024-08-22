@@ -1,5 +1,4 @@
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import pandas as pd
 
 # Example data with two dates
@@ -23,9 +22,10 @@ account_indices = {account: i for i, account in enumerate(accounts)}
 df = pd.DataFrame(transactions)
 df_grouped = df.groupby('date')
 
-# Create a subplot with a Sankey diagram for each date
-fig = make_subplots(rows=1, cols=len(df_grouped), subplot_titles=[str(date.date()) for date in df_grouped.groups.keys()])
+# Initialize the main figure
+fig = go.Figure()
 
+# Add a Sankey diagram for each date
 for i, (date, group) in enumerate(df_grouped):
     source_indices = [account_indices[tx['source']] for _, tx in group.iterrows()]
     destination_indices = [account_indices[tx['destination']] for _, tx in group.iterrows()]
@@ -42,11 +42,19 @@ for i, (date, group) in enumerate(df_grouped):
             source=source_indices,
             target=destination_indices,
             value=amounts
+        ),
+        domain=dict(
+            x=[i / len(df_grouped), (i + 1) / len(df_grouped)],
+            y=[0, 1]
         )
-    ), row=1, col=i+1)
+    ))
 
 # Update layout
-fig.update_layout(title_text="Money Flow Between Accounts Over Time", font_size=10)
+fig.update_layout(
+    title_text="Money Flow Between Accounts Over Time",
+    font_size=10,
+    height=600,  # Adjust height to fit multiple Sankey diagrams
+)
 
 # Show plot
 fig.show()
