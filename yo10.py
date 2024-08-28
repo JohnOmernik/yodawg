@@ -17,7 +17,7 @@ def generate_pbkdf2_hash(email: str, iterations: int = 10) -> str:
     hash_value = pbkdf2_hmac('sha256', password, salt, iterations)
 
     # Convert the hash to a hexadecimal string
-    hash_hex = binascii.hexlify(hash_value).decode('utf-8')
+    hash_hex = binascii.hexlify(hash_value).decode('utf-8').upper()
 
     return hash_hex
 
