@@ -2,18 +2,9 @@ import hashlib
 import binascii
 import base64
 
-# Constants
-ITERATION_CNT = 10
-MAX_LENGTH = 256
-MAX_HASH_CNT = 1000
-HASH_CAPACITY = 2
-PBKDF2_ALG = 'pbkdf2_hmac_sha256'
-
 def hash_email(email):
-    """
-    Hash the email using SHA-256 with multiple iterations.
-    Combines SHA-256 hashing, Base64 encoding, and hexadecimal encoding in one function.
-    """
+ 
+    MAX_HASH_CNT = 1000
     try:
         # Step 1: Initial SHA-256 hashing of the email (lowercased)
         email_lower = email.lower().encode('utf-8')
@@ -30,7 +21,7 @@ def hash_email(email):
         final_hash_result = hashlib.sha256(combined_hash).digest()
 
         # Step 4: Return final hash as hexadecimal string
-        return binascii.hexlify(final_hash_result).decode('utf-8')
+        return binascii.hexlify(final_hash_result).decode('utf-8').upper()
 
     except Exception as e:
         raise e
